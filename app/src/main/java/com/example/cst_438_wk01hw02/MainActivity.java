@@ -2,6 +2,7 @@ package com.example.cst_438_wk01hw02;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -48,10 +49,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         String userN = username.getText().toString();
         String userP = password.getText().toString();
+        validateUsername(userN,userP);
+    }
+
+    private boolean validateUsername(String userN, String userP) {
         boolean found = false;
         for(int i = 0; i < users.size(); i++) {
             if(userN.equalsIgnoreCase(users.get(i).getUsername())) {
-                validate(users.get(i),userP);
+                validatePassword(users.get(i),userP);
                 found = true;
             }
         }
@@ -60,20 +65,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             username.setSelection(username.getText().length());
             username.selectAll();
         }
+        return found;
     }
 
-    private void validate(User user, String userP) {
+    private boolean validatePassword(User user, String userP) {
         if (userP.equals(user.getPassword())) {
-            Intent i = new Intent(this, MainActivity2.class);
-            Bundle c = new Bundle();
-            c.putString("username",user.getUsername());
-            c.putInt("userId",user.getUserId());
-            i.putExtras(c);
-            startActivity(i);
+            startActivity(intentFactory(this, user));
+            return true;
         } else {
             password.setSelection(password.getText().length());
             password.selectAll();
             Toast.makeText(this, "Password Incorrect",Toast.LENGTH_SHORT).show();
+            return false;
         }
+    }
+
+    public static Intent intentFactory(Context context, User user) {
+        Intent i = new Intent(context, MainActivity2.class);
+        Bundle c = new Bundle();
+        c.putString("username",user.getUsername());
+        c.putInt("userId",user.getUserId());
+        i.putExtras(c);
+        return i;
     }
 }
