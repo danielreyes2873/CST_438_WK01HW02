@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -20,6 +22,11 @@ public class MainActivity2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
+        Bundle info = getIntent().getExtras();
+
+        TextView welcome = (TextView)findViewById(R.id.welcome);
+        welcome.setText("Welcome " + info.getString("username") +"!\nUser ID: " + info.getInt("userId"));
 
         textViewResult = findViewById(R.id.text_view_result);
 

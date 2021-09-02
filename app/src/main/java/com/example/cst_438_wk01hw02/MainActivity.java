@@ -62,6 +62,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void validate(User user, String userP) {
         if (userP.equals(user.getPassword())) {
             Intent i = new Intent(this, MainActivity2.class);
+            Bundle c = new Bundle();
+            c.putString("username",user.getUsername());
+            c.putInt("userId",user.getUserId());
+            i.putExtras(c);
             startActivity(i);
         } else {
             Toast.makeText(this, "Password Incorrect",Toast.LENGTH_SHORT).show();
