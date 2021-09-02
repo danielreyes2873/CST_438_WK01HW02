@@ -26,7 +26,7 @@ public class MainActivity2 extends AppCompatActivity {
         Bundle info = getIntent().getExtras();
 
         TextView welcome = (TextView)findViewById(R.id.welcome);
-        welcome.setText("Welcome " + info.getString("username") +"!\nUser ID: " + info.getInt("userId"));
+        welcome.setText("Welcome, " + info.getString("username") +"!\nUser ID: " + info.getInt("userId"));
 
         textViewResult = findViewById(R.id.text_view_result);
 
@@ -37,7 +37,7 @@ public class MainActivity2 extends AppCompatActivity {
 
         JsonPlaceHolderAPI jsonPlaceHolderAPI = retrofit.create(JsonPlaceHolderAPI.class);
 
-        Call<List<Post>> call = jsonPlaceHolderAPI.getPosts();
+        Call<List<Post>> call = jsonPlaceHolderAPI.getPosts(info.getInt("userId"));
 
         call.enqueue(new Callback<List<Post>>() {
             @Override

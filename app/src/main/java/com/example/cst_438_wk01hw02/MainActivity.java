@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         users.add(new User(2,"alice","@licE"));
         users.add(new User(3,"bob","B0b"));
         users.add(new User(4,"chris","Chr1$"));
+        users.add(new User(5,"Daniel","asdf1234"));
     }
 
     public void onClick(View v) {
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if(!found) {
             Toast.makeText(this,"Username not found",Toast.LENGTH_SHORT).show();
+            username.setSelection(username.getText().length());
+            username.selectAll();
         }
     }
 
@@ -68,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             i.putExtras(c);
             startActivity(i);
         } else {
+            password.setSelection(password.getText().length());
+            password.selectAll();
             Toast.makeText(this, "Password Incorrect",Toast.LENGTH_SHORT).show();
         }
     }
