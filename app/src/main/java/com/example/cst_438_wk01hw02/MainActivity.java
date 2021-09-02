@@ -56,14 +56,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         boolean found = false;
         for(int i = 0; i < users.size(); i++) {
             if(userN.equalsIgnoreCase(users.get(i).getUsername())) {
+                username.setBackgroundColor(getResources().getColor(android.R.color.white));
+                password.setBackgroundColor(getResources().getColor(android.R.color.white));
                 validatePassword(users.get(i),userP);
                 found = true;
             }
         }
         if(!found) {
             Toast.makeText(this,"Username not found",Toast.LENGTH_SHORT).show();
-            username.setSelection(username.getText().length());
-            username.selectAll();
+            username.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
+            password.setBackgroundColor(getResources().getColor(android.R.color.white));
         }
         return found;
     }
@@ -73,8 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intentFactory(this, user));
             return true;
         } else {
-            password.setSelection(password.getText().length());
-            password.selectAll();
+            password.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
             Toast.makeText(this, "Password Incorrect",Toast.LENGTH_SHORT).show();
             return false;
         }
