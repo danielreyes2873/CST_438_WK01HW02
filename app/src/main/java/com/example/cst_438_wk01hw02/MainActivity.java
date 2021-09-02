@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -24,6 +25,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText password;
     private Button login;
 
+    private List<User> users = new ArrayList<User>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,17 +37,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         login = (Button)findViewById(R.id.btnLogin);
 
         login.setOnClickListener(this);
+
+        users.add(new User());
+        users.add(new User(2,"alice","@licE"));
+        users.add(new User(3,"bob","B0b"));
+        users.add(new User(4,"chris","Chr1$"));
     }
 
     public void onClick(View v) {
-        validate(username.getText().toString(),password.getText().toString());
+        String userN = username.getText().toString();
+        String userP = password.getText().toString();
+        boolean found = false;
+        for(int i = 0; i < users.size(); i++) {
+            if(userN.equalsIgnoreCase(users.get(i).getUsername())) {
+                validate(users.get(i),userP);
+                found = true;
+            }
+        }
+        if(!found) {
+            Toast.makeText(this,"Username not found",Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private void validate(String userN, String userP) {
-        if ((userN.equalsIgnoreCase("Admin")) && (userP.equals("Admin"))) {
-            startActivity(new Intent(this, MainActivity2.class));
+    private void validate(User user, String userP) {
+        if (userP.equals(user.getPassword())) {
+            Intent i = new Intent(this, MainActivity2.class);
+            startActivity(i);
         } else {
-            Toast.makeText(this, "Login Error",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Password Incorrect",Toast.LENGTH_SHORT).show();
         }
     }
 }
