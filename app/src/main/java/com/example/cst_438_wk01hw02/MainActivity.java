@@ -2,8 +2,13 @@ package com.example.cst_438_wk01hw02;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -13,51 +18,33 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
-    private TextView textViewResult;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private EditText username;
+    private EditText password;
+    private Button login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textViewResult = findViewById(R.id.text_view_result);
+        username = (EditText)findViewById(R.id.etName);
+        password = (EditText)findViewById(R.id.etPassword);
+        login = (Button)findViewById(R.id.btnLogin);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://jsonplaceholder.typicode.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        login.setOnClickListener(this);
+    }
 
-        JsonPlaceHolderAPI jsonPlaceHolderAPI = retrofit.create(JsonPlaceHolderAPI.class);
+    public void onClick(View v) {
+        validate(username.getText().toString(),password.getText().toString());
+    }
 
-        Call<List<Post>> call = jsonPlaceHolderAPI.getPosts();
-
-        call.enqueue(new Callback<List<Post>>() {
-            @Override
-            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-
-                if (!response.isSuccessful()) {
-                    textViewResult.setText("Code: " + response.code());
-                    return;
-                }
-
-                List<Post> posts = response.body();
-
-                for (Post post: posts) {
-                    String content = "";
-                    content += "ID: " + post.getId() + "\n";
-                    content += "User ID: " + post.getUserId() + "\n";
-                    content += "Title: " + post.getTitle() + "\n";
-                    content += "Text: " + post.getText() + "\n\n";
-
-                    textViewResult.append(content);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Post>> call, Throwable t) {
-                textViewResult.setText(t.getMessage());
-            }
-        });
+    private void validate(String userN, String userP) {
+        if ((userN.equalsIgnoreCase("Admin")) && (userP.equals("Admin"))) {
+            startActivity(new Intent(this, MainActivity2.class));
+        } else {
+            Toast.makeText(this, "Login Error",Toast.LENGTH_SHORT).show();
+        }
     }
 }
