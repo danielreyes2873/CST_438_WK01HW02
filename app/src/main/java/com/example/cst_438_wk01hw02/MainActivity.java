@@ -24,9 +24,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private EditText username;
     private EditText password;
+    private static TextView error;
     private Button login;
+    private static Context mContext;
 
-    private List<User> users = new ArrayList<User>();
+    private static List<User> users = new ArrayList<User>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +37,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         username = (EditText)findViewById(R.id.etName);
         password = (EditText)findViewById(R.id.etPassword);
+        error = (TextView)findViewById(R.id.tvError);
         login = (Button)findViewById(R.id.btnLogin);
+        mContext = this;
 
+        populate();
         login.setOnClickListener(this);
 
-        users.add(new User());
-        users.add(new User(2,"alice","@licE"));
-        users.add(new User(3,"bob","B0b"));
-        users.add(new User(4,"chris","Chr1$"));
-        users.add(new User(5,"Daniel","asdf1234"));
     }
 
     public void onClick(View v) {
@@ -52,31 +52,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         validateUsername(userN,userP);
     }
 
-    private boolean validateUsername(String userN, String userP) {
+    public static boolean validateUsername(String userN, String userP) {
         boolean found = false;
         for(int i = 0; i < users.size(); i++) {
             if(userN.equalsIgnoreCase(users.get(i).getUsername())) {
-                username.setBackgroundColor(getResources().getColor(android.R.color.white));
-                password.setBackgroundColor(getResources().getColor(android.R.color.white));
-                validatePassword(users.get(i),userP);
+                //username.setBackgroundColor(getResources().getColor(android.R.color.white));
+                //password.setBackgroundColor(getResources().getColor(android.R.color.white));
+                if(error != null) {
+                    error.setText("");
+                }
                 found = true;
+                validatePassword(users.get(i),userP);
             }
         }
         if(!found) {
-            Toast.makeText(this,"Username not found",Toast.LENGTH_SHORT).show();
-            username.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
-            password.setBackgroundColor(getResources().getColor(android.R.color.white));
+            if(error != null) {
+                error.setText("Username not found");
+            }
+            //username.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
+            //password.setBackgroundColor(getResources().getColor(android.R.color.white));
         }
         return found;
     }
 
-    private boolean validatePassword(User user, String userP) {
+    public static boolean validatePassword(User user, String userP) {
         if (userP.equals(user.getPassword())) {
-            startActivity(intentFactory(this, user));
+            if(error != null) {
+                error.setText("");
+            }
+            if(mContext != null) {
+                mContext.startActivity(intentFactory(mContext, user));
+            }
             return true;
         } else {
-            password.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
-            Toast.makeText(this, "Password Incorrect",Toast.LENGTH_SHORT).show();
+            //password.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
+            if(error != null) {
+                error.setText("Password Incorrect");
+            }
             return false;
         }
     }
@@ -88,5 +100,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         c.putInt("userId",user.getUserId());
         i.putExtras(c);
         return i;
+    }
+
+    public static void populate() {
+        users.add(new User());
+        users.add(new User(2,"alice","@licE"));
+        users.add(new User(3,"bob","B0b"));
+        users.add(new User(4,"chris","Chr1$"));
+        users.add(new User(5,"Daniel","asdf1234"));
     }
 }
