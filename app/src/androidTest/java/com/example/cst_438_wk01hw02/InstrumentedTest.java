@@ -2,7 +2,6 @@ package com.example.cst_438_wk01hw02;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -26,17 +25,17 @@ public class InstrumentedTest {
         made locally in this method.
          */
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        Intent control = new Intent(InstrumentationRegistry.getInstrumentation().getTargetContext(),MainActivity2.class);
+        Intent control = new Intent(InstrumentationRegistry.getInstrumentation().getTargetContext(), MainActivity.class);
         User testUser1 = new User();
-        Intent test1 = MainActivity.intentFactory(appContext,testUser1);
+        Intent test1 = LoginActivity.intentFactory(appContext,testUser1);
         User testUser2 = new User(2,"alice","@licE");
-        Intent test2 = MainActivity.intentFactory(appContext,testUser2);
+        Intent test2 = LoginActivity.intentFactory(appContext,testUser2);
         User testUser3 = new User(3,"bob","B0b");
-        Intent test3 = MainActivity.intentFactory(appContext,testUser3);
+        Intent test3 = LoginActivity.intentFactory(appContext,testUser3);
         User testUser4 = new User(4,"chris","Chri$");
-        Intent test4 = MainActivity.intentFactory(appContext,testUser4);
+        Intent test4 = LoginActivity.intentFactory(appContext,testUser4);
         User testUser5 = new User(5,"daniel","asdf1234");
-        Intent test5 = MainActivity.intentFactory(appContext,testUser5);
+        Intent test5 = LoginActivity.intentFactory(appContext,testUser5);
 
         assertTrue(test1.filterEquals(control));
         assertTrue(test2.filterEquals(control));
