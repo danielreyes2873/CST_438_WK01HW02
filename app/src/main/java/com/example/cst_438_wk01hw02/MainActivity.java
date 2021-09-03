@@ -1,19 +1,17 @@
 package com.example.cst_438_wk01hw02;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,11 +20,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText username;
-    private EditText password;
+    private static EditText username;
+    private static EditText password;
     private static TextView error;
-    private Button login;
     private static Context mContext;
+    private static Resources mResources;
 
     private static List<User> users = new ArrayList<User>();
 
@@ -38,12 +36,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         username = (EditText)findViewById(R.id.etName);
         password = (EditText)findViewById(R.id.etPassword);
         error = (TextView)findViewById(R.id.tvError);
-        login = (Button)findViewById(R.id.btnLogin);
         mContext = this;
+        mResources = getResources();
 
         populate();
-        login.setOnClickListener(this);
 
+        Button login = (Button) findViewById(R.id.btnLogin);
+        login.setOnClickListener(this);
     }
 
     public void onClick(View v) {
@@ -56,8 +55,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         boolean found = false;
         for(int i = 0; i < users.size(); i++) {
             if(userN.equalsIgnoreCase(users.get(i).getUsername())) {
-                //username.setBackgroundColor(getResources().getColor(android.R.color.white));
-                //password.setBackgroundColor(getResources().getColor(android.R.color.white));
+                if(mResources != null) {
+                    username.setBackgroundColor(mResources.getColor(android.R.color.white));
+                    password.setBackgroundColor(mResources.getColor(android.R.color.white));
+                }
                 if(error != null) {
                     error.setText("");
                 }
@@ -69,8 +70,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(error != null) {
                 error.setText("Username not found");
             }
-            //username.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
-            //password.setBackgroundColor(getResources().getColor(android.R.color.white));
+            if(mResources != null) {
+                username.setBackgroundColor(mResources.getColor(android.R.color.holo_blue_bright));
+                password.setBackgroundColor(mResources.getColor(android.R.color.white));
+            }
         }
         return found;
     }
@@ -85,7 +88,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             return true;
         } else {
-            //password.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
+            if(mResources != null) {
+                password.setBackgroundColor(mResources.getColor(android.R.color.holo_blue_bright));
+            }
             if(error != null) {
                 error.setText("Password Incorrect");
             }
